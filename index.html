@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vasoactive Substances - Match Properties</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e27;
+            background-image: 
+                radial-gradient(at 20% 30%, rgba(120, 119, 198, 0.15) 0px, transparent 50%),
+                radial-gradient(at 80% 70%, rgba(99, 102, 241, 0.15) 0px, transparent 50%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a1f3a 0%, #2d1b3d 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            margin-bottom: 30px;
+            text-align: center;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        h1 {
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #a0a0b0;
+            font-size: 1.1em;
+        }
+
+        .score-board {
+            background: linear-gradient(135deg, #1a1f3a 0%, #2d1b3d 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-label {
+            color: #a0a0b0;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .score-value {
+            font-size: 2em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .game-area {
+            background: linear-gradient(135deg, #1a1f3a 0%, #2d1b3d 100%);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .instruction {
+            background: rgba(99, 102, 241, 0.15);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            border-left: 4px solid #818cf8;
+            color: #e0e0e0;
+        }
+
+        .word-banks {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .word-banks-title {
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: rgba(30, 35, 60, 0.6);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-weight: bold;
+            color: #a0a0b0;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 -5px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(99, 102, 241, 0.2);
+            color: #c084fc;
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .word-bank-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 12px;
+            padding: 20px;
+            background: rgba(10, 14, 39, 0.5);
+            border-radius: 8px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        .word-card {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: move;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .word-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .word-card.dragging {
+            opacity: 0.5;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(10, 14, 39, 0.5);
+        }
+
+        th {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 15px 10px;
+            text-align: left;
+            font-weight: bold;
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            font-size: 0.95em;
+        }
+
+        td {
+            padding: 12px 10px;
+            border: 2px solid rgba(99, 102, 241, 0.15);
+            vertical-align: top;
+            font-size: 0.9em;
+            background: rgba(26, 31, 58, 0.5);
+        }
+
+        .substance-name {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 0.95em;
+            box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+        }
+
+        .drop-zone {
+            min-height: 60px;
+            border: 2px dashed rgba(99, 102, 241, 0.3);
+            border-radius: 6px;
+            padding: 8px;
+            transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .drop-zone.drag-over {
+            background: rgba(99, 102, 241, 0.2);
+            border-color: #818cf8;
+            transform: scale(1.02);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .dropped-item {
+            background: rgba(30, 35, 60, 0.8);
+            padding: 8px 10px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85em;
+            margin-bottom: 5px;
+            line-height: 1.4;
+            border: 2px solid rgba(99, 102, 241, 0.3);
+            color: #e0e0e0;
+        }
+
+        .dropped-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .dropped-item.correct {
+            background: rgba(16, 185, 129, 0.15);
+            border: 2px solid #10b981;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .dropped-item.incorrect {
+            background: rgba(239, 68, 68, 0.15);
+            border: 2px solid #ef4444;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+        }
+
+        .remove-btn {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75em;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+
+        .remove-btn:hover {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+            box-shadow: 0 2px 10px rgba(239, 68, 68, 0.4);
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.6);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 6px 25px rgba(236, 72, 153, 0.6);
+        }
+
+        .feedback {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: linear-gradient(135deg, #1a1f3a 0%, #2d1b3d 100%);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            text-align: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            max-width: 500px;
+            border: 1px solid rgba(99, 102, 241, 0.3);
+        }
+
+        .feedback.show {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .feedback h2 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .feedback p {
+            color: #a0a0b0;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            z-index: 999;
+            backdrop-filter: blur(5px);
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        @media (max-width: 1200px) {
+            table {
+                font-size: 0.8em;
+            }
+            
+            th, td {
+                padding: 8px 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🫀 Vasoactive Substances Table</h1>
+            <p class="subtitle">Drag properties from the word banks to complete each substance's row</p>
+        </div>
+
+        <div class="score-board">
+            <div class="score-item">
+                <div class="score-label">Total Placed</div>
+                <div class="score-value" id="placed-score">0/28</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Correct</div>
+                <div class="score-value" id="correct-score">0</div>
+            </div>
+            <div class="score-item">
+                <div class="score-label">Incorrect</div>
+                <div class="score-value" id="incorrect-score" style="color: #f44336;">0</div>
+            </div>
+        </div>
+
+        <div class="game-area">
+            <div class="instruction">
+                <strong>Instructions:</strong> Use the tabs below to access different property categories. Drag items from each word bank into the appropriate cells in the table. Each substance needs all 4 properties matched correctly!
+            </div>
+
+            <div class="word-banks">
+                <div class="word-banks-title">📚 Word Banks - Click tabs to switch categories</div>
+                
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('function')">Function</button>
+                    <button class="tab" onclick="switchTab('released')">Released From</button>
+                    <button class="tab" onclick="switchTab('target')">Target(s)</button>
+                    <button class="tab" onclick="switchTab('upregulated')">Upregulated By</button>
+                </div>
+
+                <div id="tab-function" class="tab-content active">
+                    <div class="word-bank-container" id="function-bank"></div>
+                </div>
+                <div id="tab-released" class="tab-content">
+                    <div class="word-bank-container" id="released-bank"></div>
+                </div>
+                <div id="tab-target" class="tab-content">
+                    <div class="word-bank-container" id="target-bank"></div>
+                </div>
+                <div id="tab-upregulated" class="tab-content">
+                    <div class="word-bank-container" id="upregulated-bank"></div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table id="game-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%;">Substance</th>
+                            <th style="width: 21%;">Function</th>
+                            <th style="width: 21%;">Released from</th>
+                            <th style="width: 21%;">Target(s)</th>
+                            <th style="width: 22%;">Upregulated by</th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body"></tbody>
+                </table>
+            </div>
+
+            <div class="controls">
+                <button class="btn" onclick="checkAnswers()">Show Summary</button>
+                <button class="btn btn-secondary" onclick="resetGame()">Reset Game</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    <div class="feedback" id="feedback"></div>
+
+    <script>
+        const substances = [
+            {
+                name: "Histamine",
+                function: "Vasodilator, Mediator of allergic response",
+                released: "Mast cells",
+                target: "Smooth muscle (H1 and H2 receptors)",
+                upregulated: "Allergens"
+            },
+            {
+                name: "Atrial natriuretic peptide (ANP)",
+                function: "Vasodilator, Sodium excretion (urinary)",
+                released: "Atrial cardiomyocytes",
+                target: "Vasc. smooth muscle, Kidneys",
+                upregulated: "Atrial stretch"
+            },
+            {
+                name: "Brain natriuretic peptide (BNP)",
+                function: "Vasodilator, Sodium excretion (urinary)",
+                released: "Ventricular cardiomyocytes",
+                target: "Vascular smooth muscle, Kidneys",
+                upregulated: "Ventricular stretch"
+            },
+            {
+                name: "Bradykinin",
+                function: "Vasodilator, inflammatory mediator",
+                released: "Cleaved from kininogen (from liver)",
+                target: "Vascular smooth muscle",
+                upregulated: "Inflammation"
+            },
+            {
+                name: "Nitric oxide",
+                function: "Vasodilator",
+                released: "Vascular endothelium",
+                target: "Vascular smooth muscle",
+                upregulated: "Inflammation, shearing force of blood flow"
+            },
+            {
+                name: "Endothelin",
+                function: "Vasoconstrictor",
+                released: "Vascular endothelium",
+                target: "Vascular smooth muscle",
+                upregulated: "Angiotensin II, ADH, shearing force of blood flow"
+            },
+            {
+                name: "ADH/Vasopressin",
+                function: "Vasoconstrictor, Renal water reabsorption",
+                released: "Posterior pituitary",
+                target: "Vascular smooth muscle (V1a receptors), Renal tubular cells (V2 receptors)",
+                upregulated: "Low blood volume, high serum osmolality"
+            }
+        ];
+
+        let gameState = {
+            correct: 0,
+            incorrect: 0,
+            placed: 0
+        };
+
+        // Shuffle array function
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        function initGame() {
+            renderWordBanks();
+            renderTable();
+            updateScore();
+        }
+
+        function renderWordBanks() {
+            const functionBank = document.getElementById('function-bank');
+            const releasedBank = document.getElementById('released-bank');
+            const targetBank = document.getElementById('target-bank');
+            const upregulatedBank = document.getElementById('upregulated-bank');
+
+            functionBank.innerHTML = '';
+            releasedBank.innerHTML = '';
+            targetBank.innerHTML = '';
+            upregulatedBank.innerHTML = '';
+
+            // Create arrays for each type
+            const functionItems = [];
+            const releasedItems = [];
+            const targetItems = [];
+            const upregulatedItems = [];
+
+            substances.forEach((substance, index) => {
+                functionItems.push({ text: substance.function, type: 'function', index });
+                releasedItems.push({ text: substance.released, type: 'released', index });
+                targetItems.push({ text: substance.target, type: 'target', index });
+                upregulatedItems.push({ text: substance.upregulated, type: 'upregulated', index });
+            });
+
+            // Shuffle each array
+            const shuffledFunction = shuffleArray(functionItems);
+            const shuffledReleased = shuffleArray(releasedItems);
+            const shuffledTarget = shuffleArray(targetItems);
+            const shuffledUpregulated = shuffleArray(upregulatedItems);
+
+            // Render shuffled items
+            shuffledFunction.forEach(item => {
+                functionBank.appendChild(createWordCard(item.text, item.type, item.index));
+            });
+
+            shuffledReleased.forEach(item => {
+                releasedBank.appendChild(createWordCard(item.text, item.type, item.index));
+            });
+
+            shuffledTarget.forEach(item => {
+                targetBank.appendChild(createWordCard(item.text, item.type, item.index));
+            });
+
+            shuffledUpregulated.forEach(item => {
+                upregulatedBank.appendChild(createWordCard(item.text, item.type, item.index));
+            });
+        }
+
+        function createWordCard(text, type, substanceIndex) {
+            const card = document.createElement('div');
+            card.className = 'word-card';
+            card.draggable = true;
+            card.textContent = text;
+            card.dataset.text = text;
+            card.dataset.type = type;
+            card.dataset.substanceIndex = substanceIndex;
+            
+            card.addEventListener('dragstart', handleDragStart);
+            card.addEventListener('dragend', handleDragEnd);
+            
+            return card;
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+            
+            substances.forEach((substance, index) => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>
+                        <div class="substance-name">${substance.name}</div>
+                    </td>
+                    <td>
+                        <div class="drop-zone" 
+                             data-type="function" 
+                             data-substance-index="${index}"
+                             data-correct="${substance.function}"></div>
+                    </td>
+                    <td>
+                        <div class="drop-zone" 
+                             data-type="released" 
+                             data-substance-index="${index}"
+                             data-correct="${substance.released}"></div>
+                    </td>
+                    <td>
+                        <div class="drop-zone" 
+                             data-type="target" 
+                             data-substance-index="${index}"
+                             data-correct="${substance.target}"></div>
+                    </td>
+                    <td>
+                        <div class="drop-zone" 
+                             data-type="upregulated" 
+                             data-substance-index="${index}"
+                             data-correct="${substance.upregulated}"></div>
+                    </td>
+                `;
+                
+                tbody.appendChild(row);
+                
+                // Add drag and drop listeners to drop zones
+                row.querySelectorAll('.drop-zone').forEach(zone => {
+                    zone.addEventListener('dragover', handleDragOver);
+                    zone.addEventListener('drop', handleDrop);
+                    zone.addEventListener('dragleave', handleDragLeave);
+                });
+            });
+        }
+
+        function handleDragStart(e) {
+            e.target.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text', e.target.dataset.text);
+            e.dataTransfer.setData('type', e.target.dataset.type);
+            e.dataTransfer.setData('substanceIndex', e.target.dataset.substanceIndex);
+        }
+
+        function handleDragEnd(e) {
+            e.target.classList.remove('dragging');
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            e.target.classList.add('drag-over');
+        }
+
+        function handleDragLeave(e) {
+            e.target.classList.remove('drag-over');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            const dropZone = e.target.classList.contains('drop-zone') ? e.target : e.target.closest('.drop-zone');
+            dropZone.classList.remove('drag-over');
+            
+            const text = e.dataTransfer.getData('text');
+            const type = e.dataTransfer.getData('type');
+            const substanceIndex = e.dataTransfer.getData('substanceIndex');
+            
+            // Check if types match
+            if (dropZone.dataset.type !== type) {
+                return;
+            }
+            
+            // Check if already filled
+            if (dropZone.querySelector('.dropped-item')) {
+                return;
+            }
+            
+            // Remove from word bank
+            const wordCard = document.querySelector(`.word-card[data-text="${text}"][data-type="${type}"]`);
+            if (wordCard) {
+                wordCard.remove();
+            }
+            
+            // Check if correct
+            const correctText = dropZone.dataset.correct;
+            const isCorrect = text === correctText;
+            
+            // Add to drop zone
+            const droppedItem = document.createElement('div');
+            droppedItem.className = `dropped-item ${isCorrect ? 'correct' : 'incorrect'}`;
+            droppedItem.dataset.text = text;
+            droppedItem.dataset.type = type;
+            droppedItem.dataset.substanceIndex = substanceIndex;
+            droppedItem.innerHTML = `
+                <span>${text}</span>
+                <button class="remove-btn" onclick="removeItem('${text.replace(/'/g, "\\'")}', '${type}', ${substanceIndex})">✕</button>
+            `;
+            
+            dropZone.appendChild(droppedItem);
+            
+            updateScore();
+        }
+
+        function removeItem(text, type, substanceIndex) {
+            // Find and remove from table
+            const droppedItem = document.querySelector(`.dropped-item[data-text="${text}"][data-type="${type}"]`);
+            if (droppedItem) {
+                droppedItem.classList.remove('correct', 'incorrect');
+                droppedItem.remove();
+            }
+            
+            // Add back to appropriate word bank
+            const bankId = `${type}-bank`;
+            const bank = document.getElementById(bankId);
+            const card = createWordCard(text, type, substanceIndex);
+            bank.appendChild(card);
+            
+            updateScore();
+        }
+
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`tab-${tabName}`).classList.add('active');
+        }
+
+        function updateScore() {
+            const placed = document.querySelectorAll('.dropped-item').length;
+            const correct = document.querySelectorAll('.dropped-item.correct').length;
+            const incorrect = document.querySelectorAll('.dropped-item.incorrect').length;
+            
+            gameState.placed = placed;
+            gameState.correct = correct;
+            gameState.incorrect = incorrect;
+            
+            document.getElementById('placed-score').textContent = `${placed}/28`;
+            document.getElementById('correct-score').textContent = correct;
+            document.getElementById('incorrect-score').textContent = incorrect;
+            
+            // Auto-show completion feedback
+            if (placed === 28) {
+                setTimeout(() => {
+                    if (incorrect === 0) {
+                        showFeedback('🎉 Perfect Score!', `You correctly matched all 28 properties! You've mastered vasoactive substances!`);
+                    } else {
+                        showFeedback('Table Complete!', `You got ${correct} out of 28 correct (${Math.round(correct/28*100)}%). Review the red entries and fix them!`);
+                    }
+                }, 300);
+            }
+        }
+
+        function checkAnswers() {
+            const placed = gameState.placed;
+            const correct = gameState.correct;
+            const incorrect = gameState.incorrect;
+            
+            if (placed === 0) {
+                showFeedback('No Items Placed', 'Start dragging items from the word banks to fill in the table!');
+            } else if (placed === 28) {
+                if (incorrect === 0) {
+                    showFeedback('🎉 Perfect Score!', `All 28 properties are correctly matched! Excellent work!`);
+                } else {
+                    showFeedback('Review Needed', `You have ${correct} correct and ${incorrect} incorrect. Remove the red items and try again!`);
+                }
+            } else {
+                showFeedback('Progress Report', `Current progress: ${correct} correct, ${incorrect} incorrect. ${28 - placed} items remaining!`);
+            }
+        }
+
+        function showFeedback(title, message) {
+            const feedback = document.getElementById('feedback');
+            const overlay = document.getElementById('overlay');
+            
+            feedback.innerHTML = `
+                <h2>${title}</h2>
+                <p style="font-size: 1.1em; color: #666; margin-bottom: 20px;">${message}</p>
+                <button class="btn" onclick="closeFeedback()">Continue</button>
+            `;
+            
+            overlay.classList.add('show');
+            setTimeout(() => feedback.classList.add('show'), 10);
+        }
+
+        function closeFeedback() {
+            document.getElementById('feedback').classList.remove('show');
+            document.getElementById('overlay').classList.remove('show');
+        }
+
+        function resetGame() {
+            // Clear all drop zones
+            document.querySelectorAll('.drop-zone').forEach(zone => {
+                zone.innerHTML = '';
+            });
+            
+            // Reset scores
+            gameState = { correct: 0, incorrect: 0, placed: 0 };
+            document.getElementById('placed-score').textContent = '0/28';
+            document.getElementById('correct-score').textContent = 0;
+            document.getElementById('incorrect-score').textContent = 0;
+            
+            // Re-render word banks
+            renderWordBanks();
+            
+            closeFeedback();
+        }
+
+        // Initialize game on load
+        initGame();
+    </script>
+</body>
+</html>
